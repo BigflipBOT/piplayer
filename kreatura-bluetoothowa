@@ -1,0 +1,173 @@
+    1  sudo apt upgrade
+    2  sudo nano /boot/config.txt
+    3  vi
+    4  sudo vi /etc/asound.conf
+    5  sudo nano /etc/asound.conf
+    6  sudo reboot
+    7  aplay -l
+    8  sudo nano /boot/config.txt
+    9  ls
+   10  vim /etc/NetworkManager/
+   11  vi /etc/NetworkManager/
+   12  ls /etc/NetworkManager/
+   13  ls /etc/NetworkManager/NetworkManager.conf 
+   14  cat /etc/NetworkManager/NetworkManager.conf 
+   15  ls /etc/NetworkManager/conf.d/
+   16  ls /etc/NetworkManager/system-connections/
+   17  nmcli
+   18  ip
+   19  systemctl status 
+   20  ls /etc/wpa_supplicant/
+   21  cat /etc/wpa_supplicant/wpa_supplicant.conf 
+   22  sudo cat /etc/wpa_supplicant/wpa_supplicant.conf 
+   23  rfkil
+   24  sudo cat /etc/wpa_supplicant/action_wpa.sh 
+   25  sudo cat /etc/wpa_supplicant/action_wpa.sh | less
+   26  exit
+   27  vi /home/pipod/.xxh/.xxh/shells/xxh-shell-zsh/build/zsh-bin/bin/zsh
+   28  rm /home/pipod/.xxh/.xxh/shells/xxh-shell-zsh/build/zsh-bin/bin/zsh
+   29  /home/pipod/.xxh/.xxh/shells/xxh-shell-zsh/build/zsh.sh
+   30  rm /home/pipod/.xxh/.xxh/shells/xxh-shell-zsh/build/zsh.sh
+   31  rm /home/pipod/.xxh/.xxh/shells/xxh-shell-zsh/build/zsh-bin/bin/zsh
+   32  exit
+   33  sudo apt get zsh
+   34  sudo apt install zsh
+   35  ext
+   36  exit
+   37  sudo apt-get -y update && sudo apt-get -y upgrade
+   38  ls
+   39  sudo apt install vim
+   40  sudo vim /etc/modprobe.d/alsa-blacklist.conf
+   41  sudo vim /boot/config.txt 
+   42  sudo vim /etc/asound.conf 
+   43  aplay -I
+   44  aplay -l
+   45  speaker-test -D default -c 2 -twav
+   46  aplay -I
+   47  aplay -l
+   48  man speaker-test
+   49  speaker-test -D sndrpihifiberry -c 2 -twav
+   50  speaker-test -D "device 0" -c 2 -twav
+   51  speaker-test -D default -c 2 -twav
+   52  sudo vim /boot/firmware/config.txt
+   53  sudo vim /boot/config.txt 
+   54  sudo nano /etc/modprobe.d/alsa-blacklist.conf
+   55  reboot
+   56  reboot now
+   57  sudo reboot now
+   58  speaker-test -D default -c 2 -twav
+   59  grep -a . /proc/device-tree/hat/*
+   60  grep -a . /proc/device-tree/*
+   61  ls
+   62  alsa
+   63  alsactl
+   64  man alsactl 
+   65  aplay
+   66  amixer
+   67  man alsa
+   68  man amixer
+   69  amixer get
+   70  amixer get default
+   71  amixer get 0
+   72  man amixer get 0
+   73  man amixer info 
+   74  amixer info 
+   75  aplay -l
+   76  speaker-test -D default -c 2 -twav
+   77  sudo vim /usr/share/alsa/alsa.conf 
+   78  alsamixer
+   79  sudo vim /usr/share/alsa/alsa.conf 
+   80  speaker-test -c2
+   81  speaker-test -c2 -t sine -f 500
+   82  speaker-test -c2
+   83  bluetoothctl 
+   84  sudo bluetoothctl 
+   85  sudo service bluetooth restart
+   86  sudo bluetoothctl 
+   87  sudo service bluetooth restart
+   88  sudo usermod -aG bluetooth pipod
+   89  sudo apt install pi-bluetooth bluez pulseaudio pulseaudio-module-bluetooth
+   90  sudo systemctl restart bluetooth
+   91  bluetoothctl 
+   92  sudo apt-get install pulseaudio pulseaudio-utils pulseaudio-module-bluetooth
+   93  sudo usermod -a -G lp pi
+   94  sudo usermod -a -G lp pipod
+   95  bluetoothctl 
+   96  sudo systemctl restart bluetooth
+   97  bluetoothctl 
+   98  bluetoothctl | grep bluetooth
+   99  pulseaudio --dump-modules | grep bluetooth
+  100  sudo apt-get install pulseaudio*
+  101  sudo apt update
+  102  sudo apt-get install pulseaudio*
+  103  pactl list short modules
+  104  sudo pactl list short modules
+  105  vim /etc/pulse/default.pa 
+  106  sudo vim /etc/pulse/default.pa 
+  107  sudo usermod -a -G lp pi
+  108  sudo usermod -a -G lp pipod
+  109  sudo cat /var/log/syslog | grep -i protocol
+  110  sudo systemctl restart bluetooth
+  111  bluetoothctl 
+  112  systemctl status bluetooth
+  113  sudo vim /etc/systemd/system/bluetooth.service.d/override.conf
+  114  ls /etc/systemd/system/
+  115  ls /etc/systemd/system/bluetooth.service.d
+  116  ls /etc/systemd/system/bluetooth*
+  117  ls /etc/systemd/system/bluetooth.service
+  118  ls /etc/systemd/system/bluetooth*
+  119  ls /etc/systemd/system/bluetooth.target.wants/
+  120  cat /etc/systemd/system/bluetooth.target.wants/bluetooth.service .
+  121  cat /etc/systemd/system/bluetooth.target.wants/bluetooth.service 
+  122  mkdir /etc/systemd/system/bluetooth.service.d/
+  123  sudo mkdir /etc/systemd/system/bluetooth.service.d/
+  124  sudo touch /etc/systemd/system/bluetooth.service.d/override.conf
+  125  sudo vim /etc/systemd/system/bluetooth.service.d/override.conf
+  126  sudo systemctl restart bluetooth
+  127  sudo systemctl daemon-reload
+  128  sudo systemctl restart bluetooth
+  129  sudo systemctl status bluetooth
+  130  uname -a
+  131  bluetoothctl
+  132  sudo systemctl status bluetooth
+  133  sudo cat /var/log/syslog | grep -i protocol
+  134  bluetoothctl --help
+  135  bluetoothctl --help | less
+  136  bluetoothctl list
+  137  bluetoothctl show
+  138  bluetoothctl 
+  139  bluetoothctl devices
+  140  sudo systemctl restart bluetooth
+  141  bluetoothctl connect 54:10:4F:92:C5:AB
+  142  sudo cat /var/log/syslog | grep -i protocol 
+  143  pactl load-module module-bluetooth-discover
+  144  sudo pactl load-module module-bluetooth-discover
+  145  pactl load-module module-bluetooth-discover
+  146  ps aux | grep pulseaudio
+  147  ps au
+  148  ps aux
+  149  ps aux | grep puleaudio
+  150  pulseaudio --start
+  151  ps aux | grep pulseaudio
+  152  pactl load-module module-bluetooth-discover
+  153  sudo vim /etc/pulse/default.pa
+  154  sudo vim /usr/bin/start-pulseaudio-x11
+  155  sudo vim /etc/pulse/default.pa
+  156  sudo vim /usr/bin/start-pulseaudio-x11
+  157  sudo apt install bluetooth pulseaudio-module-bluetooth
+  158  reboot
+  159  reboot now
+  160  sudo reboot now
+  161  sudo cat /var/log/syslog | grep -i protocol 
+  162  bluetoothctl 
+  163  alsamixer
+  164  speaker-test -c2
+  165  speaker-test -c2 -t sine -f 500
+  166  aplay -l
+  167  speaker-test -D default -c 2 -twav
+  168  bluetoothctl 
+  169  alsamixer
+  170  aplay -l
+  171  speaker-test -c2 -t sine -f 500
+  172  historu
+  173  history
