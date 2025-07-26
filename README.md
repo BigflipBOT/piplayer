@@ -3,6 +3,10 @@ https://www.raspberrypi.com/software/operating-systems/
 
 ## img customisation 
 https://brettweir.com/blog/custom-raspberry-pi-image-no-hardware/
+
+`/mnt/boot/firmware/cmdline.txt`
+`/mnt/boot/firstrun.sh`
+
 ### chrooting into arm system from x86
 https://wiki.archlinux.org/title/QEMU#Chrooting_into_arm/arm64_environment_from_x86_64
 
@@ -16,7 +20,7 @@ xzcat 2025-05-13-raspios-bookworm-arm64-lite.img.xz | doas dd of=/dev/mmcblk0 bs
 
 ## shrink fs as much as possible:
 ```
-doas e2fsck -v /dev/mmcblk0p2 && doas resize2fs -M /dev/mmcblk0p2
+doas e2fsck -f /dev/mmcblk0p2 && doas resize2fs -M /dev/mmcblk0p2
 ```
 
 ## sanity check for space:
@@ -120,13 +124,14 @@ sudo nano /etc/modprobe.d/alsa-blacklist.conf
 blacklist snd_bcm2835
 
 ## 
-sudo nano /boot/firmware/config.txt
+sudo vim /boot/firmware/config.txt
 
 comment out dtparam=audio=on (# in col 0)
+add `dtoverlay=hifiberry-dac` at the end
 
 ## sound configuration
 
-sudo nano /etc/asound.conf
+sudo vim /etc/asound.conf
 ```
 pcm.!default {
 type hw
@@ -138,6 +143,19 @@ type hw
 card 0
 }
 ```
+add self to audio group
+```
+sudo usermod -aG audio pi
+```
+reboot
+
+stuff should work by now:
+```
+aplay -l
+speaker-test -D default -c 2 -twav
+```
+
+
 https://www.raspberrypi-spy.co.uk/2019/06/using-a-usb-audio-device-with-the-raspberry-pi/
 sudo nano /usr/share/alsa/alsa.conf
 ```
@@ -163,10 +181,14 @@ https://unix.stackexchange.com/questions/705326/debian-11-bluetooth-sap-driver-i
 https://raspberrypi.stackexchange.com/questions/67617/bluetoothctl-fails-to-connect-to-any-device-failed-to-connect-org-bluez-erro
 https://askubuntu.com/questions/689281/pulseaudio-can-not-load-bluetooth-module/689297#689297
 
-sudo apt install bluetooth pulseaudio-module-bluetooth
+sudo apt install bluetooth pulseaudio* ~pulseaudio-module-bluetooth~
 
 
 
 ___
 
 
+# binding buttons and stuff 
+https://www.musicpd.org/doc/mpc/html/ 
+
+https://github.com/eonpatapon/mpDris2
