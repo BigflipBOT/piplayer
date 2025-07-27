@@ -101,7 +101,7 @@ doas chown root:root wifi.nmconnection
 ## create music partition
 ```
 mkdir /home/pi/music
-# echo "PARTUUID=d9c86127-03  /home/pi/music  ext4    defaults 0 2" >> /mnt/etc/fstab 
+# echo "PARTUUID=d9c86127-03  /home/pi/music  ext4    defaults 1 2" >> /mnt/etc/fstab 
 doas mkfs.ext4 /dev/mmcblk0p3
 ```
 ## giga umount
