@@ -186,8 +186,10 @@ sudo apt install bluetooth pulseaudio* ~pulseaudio-module-bluetooth~
 ```
 
 ## adafriut Mini PITFT 1.3
-https://learn.adafruit.com/adafruit-mini-pitft-135x240-color-tft-add-on-for-raspberry-pi/1-3-240x240-kernel-module-install
-https://github.com/adafruit/Raspberry-Pi-Installer-Scripts
+
+(pinout of display)[https://learn.adafruit.com/adafruit-mini-pitft-135x240-color-tft-add-on-for-raspberry-pi?view=all]
+(install instructions)[https://learn.adafruit.com/adafruit-mini-pitft-135x240-color-tft-add-on-for-raspberry-pi/1-3-240x240-kernel-module-install]
+(driver repo)[https://github.com/adafruit/Raspberry-Pi-Installer-Scripts]
 
 update and upgrade
 ```
