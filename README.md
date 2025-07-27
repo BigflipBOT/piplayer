@@ -185,12 +185,50 @@ https://askubuntu.com/questions/689281/pulseaudio-can-not-load-bluetooth-module/
 sudo apt install bluetooth pulseaudio* ~pulseaudio-module-bluetooth~
 ```
 
+## adafriut Mini PITFT 1.3
+https://learn.adafruit.com/adafruit-mini-pitft-135x240-color-tft-add-on-for-raspberry-pi/1-3-240x240-kernel-module-install
+https://github.com/adafruit/Raspberry-Pi-Installer-Scripts
+
+update and upgrade
+```
+sudo apt update -y && sudo apt-get update -y && sudo apt-get upgrade -y
+```
+
+Setup Virtual Environment
+```
+sudo apt install python3-venv
+python -m venv env --system-site-packages
+
+```
+
+To activate the virtual environment:
+```
+source env/bin/activate
+```
+
+`sudo shutdown -h now` Remove power and attach the miniPiTFT. Watch that the pins plug into the first 2x12 headers! The rounded corner and mounting hole should line up.
+
+
+Attach power to the Pi and re-log in. The PiTFT should be lit but nothing on the screen.
+Run the following at the terminal
+
+```
+cd ~
+pip3 install --upgrade adafruit-python-shell click
+sudo apt-get install -y git
+git clone https://github.com/adafruit/Raspberry-Pi-Installer-Scripts.git
+cd Raspberry-Pi-Installer-Scripts
+sudo -E env PATH=$PATH python3 adafruit-pitft.py --display=st7789_240x240 --rotation=0 --install-type=console
+
+```
 
 
 ___
 
 
 # binding buttons and stuff 
+https://forums.raspberrypi.com/viewtopic.php?t=284359
+
 https://www.musicpd.org/doc/mpc/html/ 
 
 https://github.com/eonpatapon/mpDris2
