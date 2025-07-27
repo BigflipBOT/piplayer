@@ -181,7 +181,9 @@ https://unix.stackexchange.com/questions/705326/debian-11-bluetooth-sap-driver-i
 https://raspberrypi.stackexchange.com/questions/67617/bluetoothctl-fails-to-connect-to-any-device-failed-to-connect-org-bluez-erro
 https://askubuntu.com/questions/689281/pulseaudio-can-not-load-bluetooth-module/689297#689297
 
+```
 sudo apt install bluetooth pulseaudio* ~pulseaudio-module-bluetooth~
+```
 
 
 
