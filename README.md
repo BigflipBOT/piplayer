@@ -227,9 +227,27 @@ sudo -E env PATH=$PATH python3 adafruit-pitft.py --display=st7789_240x240 --rota
 
 ___
 
+# installing and configuration of mpd and ncmpcpp
+```
+sudo apt-get install mpd ncmpcpp
+```
+
+https://www.customelectronics.co.uk/rpihq.htm
 
 # binding buttons and stuff 
+huge saver:
+https://github.com/tio/input-emulator
+https://github.com/torvalds/linux/blob/v4.12/include/uapi/linux/input-event-codes.h#L64
+
+https://github.com/chaitu236/TermKeyboard
+
+https://forums.raspberrypi.com/viewtopic.php?t=87932
+https://www.fsays.eu/Blogging/Blog/Details/23
+
 https://forums.raspberrypi.com/viewtopic.php?t=284359
+
+https://forums.raspberrypi.com/viewtopic.php?t=184050
+
 
 https://www.musicpd.org/doc/mpc/html/ 
 
