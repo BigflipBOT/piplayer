@@ -235,6 +235,7 @@ sudo apt-get install mpd ncmpcpp
 https://www.customelectronics.co.uk/rpihq.htm
 
 # binding buttons and stuff 
+## input emulation
 huge saver:
 https://github.com/tio/input-emulator
 https://github.com/torvalds/linux/blob/v4.12/include/uapi/linux/input-event-codes.h#L64
@@ -247,6 +248,12 @@ https://www.fsays.eu/Blogging/Blog/Details/23
 https://forums.raspberrypi.com/viewtopic.php?t=284359
 
 https://forums.raspberrypi.com/viewtopic.php?t=184050
+
+## pigpio
+https://abyz.me.uk/rpi/pigpio/cif.html
+```
+sudo apt install pigpio
+```
 
 
 https://www.musicpd.org/doc/mpc/html/ 
