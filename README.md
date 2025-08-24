@@ -230,6 +230,7 @@ ___
 # installing and configuration of mpd and ncmpcpp
 ```
 sudo apt-get install mpd ncmpcpp
+systemctl --user ebable mpd
 ```
 
 https://www.customelectronics.co.uk/rpihq.htm
@@ -259,3 +260,6 @@ sudo apt install pigpio
 https://www.musicpd.org/doc/mpc/html/ 
 
 https://github.com/eonpatapon/mpDris2
+
+# optimalisation
+https://ohyaan.github.io/tips/raspberry_pi_boot_time_optimization__complete_performance_guide/#2-kernel-command-line-optimization
