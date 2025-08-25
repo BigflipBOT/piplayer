@@ -261,6 +261,22 @@ https://www.musicpd.org/doc/mpc/html/
 
 https://github.com/eonpatapon/mpDris2
 
+## building programs
+main build gcc command:
+```
+gcc -Wall -pthread -o prog prog.c -lpigpio -lrt
+```
+building helper script:
+```
+#!/bin/bash
+
+filename=$(basename -- "$1")
+filename=${filename%.*}
+echo $filename
+gcc -Wall -pthread -o $filename $1 -lpigpio -lrt
+```
+main program is being executed from .bashrc at pi users home dir.
+
 # optimalisation
 ## turning off unused stuff
 https://ohyaan.github.io/tips/raspberry_pi_boot_time_optimization__complete_performance_guide/#2-kernel-command-line-optimization
