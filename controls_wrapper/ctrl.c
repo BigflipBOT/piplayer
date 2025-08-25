@@ -42,7 +42,7 @@ void f_dipol_lower_r();
 // }
 
 int main(int argc, char *argv[]) {
-// int main() {
+    // int main() {
     // there is an assumption that following programs are already running:
     // mpd daemon
     // input-emulator daemon
@@ -55,7 +55,8 @@ int main(int argc, char *argv[]) {
         debug = 1;
     }
 
-    gpioCfgPermissions((1<<12) | (1<<23) |(1<<24) |(1<<5) |(1<<6) |(1<<7) |(1<<1) | (1<<20));
+    gpioCfgPermissions((1 << 12) | (1 << 23) | (1 << 24) | (1 << 5) | (1 << 6) |
+                       (1 << 7) | (1 << 1) | (1 << 20));
     gpioCfgClock(5, 0, 0); // important to use PWM to evade audio issues
 
     if (gpioInitialise() < 0) {
@@ -162,7 +163,6 @@ void f_up_donw(int gpio, int level, uint32_t tick) {
     return;
 }
 void f_play_pause_ok(int gpio, int level, uint32_t tick) {
-
     if (level == 0) {
         switch (controls) {
         case ARROWS:
@@ -172,7 +172,12 @@ void f_play_pause_ok(int gpio, int level, uint32_t tick) {
             press_key("p");
             break;
         case G_NAVIGATION:
-            press_key("delete");
+            if (gpioRead(20)) {
+                type_keys("`s20");
+                press_key("enter");
+            } else {
+                press_key("delete");
+            }
             break;
         }
     }
