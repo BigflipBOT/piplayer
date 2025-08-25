@@ -40,6 +40,10 @@ void gpio_setup() {
 }
 
 int main() {
+
+    gpioCfgPermissions((1<<12) | (1<<23) |(1<<24) |(1<<5) |(1<<6) |(1<<7) |(1<<1) |(1<<20));
+    gpioCfgClock(8, 1, 0);
+
     if (gpioInitialise() < 0) {
         return 1;
     } else {
