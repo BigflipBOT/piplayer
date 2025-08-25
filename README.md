@@ -262,4 +262,32 @@ https://www.musicpd.org/doc/mpc/html/
 https://github.com/eonpatapon/mpDris2
 
 # optimalisation
+## turning off unused stuff
 https://ohyaan.github.io/tips/raspberry_pi_boot_time_optimization__complete_performance_guide/#2-kernel-command-line-optimization
+https://www.cnx-software.com/2021/12/09/raspberry-pi-zero-2-w-power-consumption/
+
+### config.txt modifications
+```
+# Restricting GPU
+gpu_mem=16
+# Turning off loading overlays for camera
+camera_auto_detect=0
+# Turning off loading overlays for dsi displys
+display_auto_detect=0
+# Disabling onboard audio
+dtparam=audio=off
+# (Comment out) force legacy drivers
+#dtoverlay=vc4-kms-v3d
+```
+
+### usefull commands (didn't feel like doing those)
+turning off hdmi 
+https://forums.raspberrypi.com/viewtopic.php?t=113602
+```
+/usr/bin/tvservice -o
+```
+turning off leds
+```
+echo none | sudo tee /sys/class/leds/led0/trigger
+```
+### diasbling
