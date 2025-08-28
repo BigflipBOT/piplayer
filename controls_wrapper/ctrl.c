@@ -20,10 +20,10 @@ typedef enum mode {
     ARROWS = 0,
     MUSIC_CONTROL = 1,
     G_NAVIGATION = 2,
-    TEST = 3,
 } mode;
 mode controls;
 int ncmpcpp_screen = 1;
+int override = 0;
 
 void f_left_right(int gpio, int level, uint32_t tick);
 void f_up_donw(int gpio, int level, uint32_t tick);
@@ -63,9 +63,12 @@ int main(int argc, char *argv[]) {
         printf("pigpio failed.\n");
         exit(EXIT_FAILURE);
     }
-    if (gpioRead(20)) {
 
-    } else if (gpioRead(7)) {
+    if (gpioRead(20)) {
+        override = 1;
+    }
+
+    if (gpioRead(7)) {
         controls = G_NAVIGATION;
     } else if (gpioRead(1)) {
         controls = MUSIC_CONTROL;
@@ -84,13 +87,16 @@ int main(int argc, char *argv[]) {
     gpioSetAlertFunc(7, f_slider_upper);
     gpioSetAlertFunc(1, f_slider_upper);
 
-    // gpioSetAlertFunc(20, f_slider_lower);
+    gpioSetAlertFunc(20, f_slider_lower);
 
     // gpioSetAlertFunc(27, f_dipol_upper);
     // gpioSetAlertFunc(17, f_dipol_upper);
 
     d_print("init done\n");
     d_print("mode %d\n", controls);
+    if (override) {
+        d_print("override active \n");
+    }
 
     // main loop
     while (running) {
@@ -165,6 +171,11 @@ void f_up_donw(int gpio, int level, uint32_t tick) {
         switch (controls) {
         case ARROWS:
             press_key(arrow);
+            if (override) {
+                for (int i = 0; i < 14; i++) {
+                    press_key(arrow);
+                }
+            }
             break;
         case MUSIC_CONTROL:
             press_key(music_ctrl);
@@ -180,13 +191,17 @@ void f_play_pause_ok(int gpio, int level, uint32_t tick) {
     if (level == 0) {
         switch (controls) {
         case ARROWS:
-            press_key("enter");
+            if (override) {
+                press_key("a");
+            } else {
+                press_key("enter");
+            }
             break;
         case MUSIC_CONTROL:
             press_key("p");
             break;
         case G_NAVIGATION:
-            if (gpioRead(20)) {
+            if (override) {
                 type_keys("`s20");
                 press_key("enter");
             } else {
@@ -222,16 +237,23 @@ void f_slider_upper(int gpio, int level, uint32_t tick) {
 
 void f_slider_lower(int gpio, int level, uint32_t tick) {
     switch (gpio) {
-    case 13:
-        // if (level == 0) {
-        //
-        // } else if (level == 1) {
-        // }
+    case 20:
+        if (level == 0) {
+            override = 0;
+        } else if (level == 1) {
+            override = 1;
+        }
         break;
 
-    case 26:
+    case 13:
         break;
     }
+    if (override) {
+        d_print("override activated\n");
+    } else {
+        d_print("override deactivated\n");
+    }
+    return;
 }
 
 void f_dipol_upper(int gpio, int level, uint32_t tick) {
