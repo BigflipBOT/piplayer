@@ -30,10 +30,10 @@ void f_up_donw(int gpio, int level, uint32_t tick);
 void f_play_pause_ok(int gpio, int level, uint32_t tick);
 void f_slider_upper(int gpio, int level, uint32_t tick);
 void f_slider_lower(int gpio, int level, uint32_t tick);
-void f_dipol_upper_l();
-void f_dipol_upper_r();
-void f_dipol_lower_l();
-void f_dipol_lower_r();
+void f_dipol_upper(int gpio, int level, uint32_t tick);
+void f_dipol_upper_r(int gpio, int level, uint32_t tick);
+void f_dipol_lower_l(int gpio, int level, uint32_t tick);
+void f_dipol_lower_r(int gpio, int level, uint32_t tick);
 
 // void testFunc(int gpio, int level, uint32_t tick) {
 //     if (level == 1) {
@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
 
     gpioCfgPermissions((1 << 12) | (1 << 23) | (1 << 24) | (1 << 5) | (1 << 6) |
                        (1 << 7) | (1 << 1) | (1 << 20));
-    gpioCfgClock(5, 0, 0); // important to use PWM to evade audio issues
+    gpioCfgClock(8, 0, 0); // important to use PWM to evade audio issues
 
     if (gpioInitialise() < 0) {
         printf("pigpio failed.\n");
@@ -86,11 +86,25 @@ int main(int argc, char *argv[]) {
 
     // gpioSetAlertFunc(20, f_slider_lower);
 
+    // gpioSetAlertFunc(27, f_dipol_upper);
+    // gpioSetAlertFunc(17, f_dipol_upper);
+
     d_print("init done\n");
     d_print("mode %d\n", controls);
 
     // main loop
     while (running) {
+        // if (gpioRead(27) == 1) {
+        //     f_dipol_upper(27, 1, 0);
+        // } else {
+        //     f_dipol_upper(27, 0, 0);
+        // }
+        // if (gpioRead(17) == 1) {
+        //     f_dipol_upper(17, 1, 0);
+        // } else {
+        //     f_dipol_upper(17, 0, 0);
+        // }
+        // sleep(1);
     }
 
     d_print("terminating...\n");
@@ -206,7 +220,54 @@ void f_slider_upper(int gpio, int level, uint32_t tick) {
     return;
 }
 
-void f_slider_lower(int gpio, int level, uint32_t tick);
+void f_slider_lower(int gpio, int level, uint32_t tick) {
+    switch (gpio) {
+    case 13:
+        // if (level == 0) {
+        //
+        // } else if (level == 1) {
+        // }
+        break;
+
+    case 26:
+        break;
+    }
+}
+
+void f_dipol_upper(int gpio, int level, uint32_t tick) {
+    // d_print("f_dipol_upper invoked\n");
+    char *component;
+    char *action;
+    switch (gpio) {
+    case 27:
+        component = "wlan";
+        break;
+    case 17:
+        component = "bluetooth";
+        break;
+    }
+    switch (level) {
+    case 1:
+        action = "unblock";
+        break;
+    case 0:
+        action = "block";
+        break;
+    }
+
+    int pid;
+    d_print("executing rfkill %s %s\n", action, component);
+
+    if ((pid = fork()) == 0) {
+        execl("rfkill", "rfkill", action, component, NULL);
+    }
+}
+
+// void f_dipol_upper_r(int gpio, int level, uint32_t tick);
+
+void f_dipol_lower_l(int gpio, int level, uint32_t tick);
+
+void f_dipol_lower_r(int gpio, int level, uint32_t tick);
 
 void press_key(char *input) {
     int pid;
@@ -255,6 +316,7 @@ void gpio_setup() {
     gpioSetMode(26, PI_INPUT);
     gpioSetMode(24, PI_INPUT);
     gpioSetMode(23, PI_INPUT);
+    gpioSetMode(22, PI_OUTPUT);
 
     gpioSetPullUpDown(5, PI_PUD_DOWN);
     gpioSetPullUpDown(6, PI_PUD_DOWN);
@@ -269,4 +331,5 @@ void gpio_setup() {
     gpioSetPullUpDown(26, PI_PUD_DOWN);
     gpioSetPullUpDown(24, PI_PUD_UP);
     gpioSetPullUpDown(23, PI_PUD_UP);
+    gpioSetPullUpDown(22, PI_PUD_DOWN);
 }
