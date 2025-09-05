@@ -87,24 +87,31 @@ fi
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more ls aliases
-alias ll='ls -l'
+#alias ll='ls -l'
 #alias la='ls -A'
 #alias l='ls -CF'
 
 clear
-#sleep 5
-#ip a | grep inet
 #sleep 8
 
 sudo input-emulator start kbd
-# no idea why below line fucking work ;3
-sudo /home/pi/debug & (sleep 1 && sudo kill $(pidof debug))
+# debug start
+#ip a | grep "inet "
+#sleep 5
+# debug end
+#
+# no idea why below line fucking works ;3
+sudo /home/pi/debug & (sleep 2 && sudo kill $(pidof debug))
 
 if [[ $(who am i) =~ \([-a-zA-Z0-9\.]+\)$ ]]; then
     echo SSH
 else
+    rfkill block wlan
+    rfkill block bluetooth 
     tmux new-session -d -s ctrl 'sudo /home/pi/ctrl debug'
-    ncmpcpp
+    #tmux new-session -s ctrl 'sudo /home/pi/ctrl debug'
+    #ncmpcpp
+    cmatrix
 fi
 
 #cmatrix
@@ -115,9 +122,9 @@ fi
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
+#if [ -f ~/.bash_aliases ]; then
+#    . ~/.bash_aliases
+#fi
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
