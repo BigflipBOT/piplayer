@@ -110,8 +110,8 @@ else
     rfkill block bluetooth 
     tmux new-session -d -s ctrl 'sudo /home/pi/ctrl debug'
     #tmux new-session -s ctrl 'sudo /home/pi/ctrl debug'
-    #ncmpcpp
-    cmatrix
+    ncmpcpp
+    #cmatrix
 fi
 
 #cmatrix
