@@ -1,8 +1,10 @@
+#include <errno.h>
 #include <pigpio.h>
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/mman.h>
 #include <unistd.h>
 
@@ -31,7 +33,8 @@ void f_play_pause_ok(int gpio, int level, uint32_t tick);
 void f_slider_upper(int gpio, int level, uint32_t tick);
 void f_slider_lower(int gpio, int level, uint32_t tick);
 void f_dipol_upper(int gpio, int level, uint32_t tick);
-void f_dipol_upper_r(int gpio, int level, uint32_t tick);
+int gpio27state = 0;
+int gpio17state = 0;
 void f_dipol_lower_l(int gpio, int level, uint32_t tick);
 void f_dipol_lower_r(int gpio, int level, uint32_t tick);
 
@@ -76,6 +79,15 @@ int main(int argc, char *argv[]) {
         controls = ARROWS;
     }
 
+    if (gpioRead(27)) {
+        gpio27state = 1;
+        f_dipol_upper(27, gpio27state, 0);
+    }
+    if (gpioRead(17)) {
+        gpio27state = 1;
+        f_dipol_upper(17, gpio17state, 0);
+    }
+
     gpioSetAlertFunc(12, f_play_pause_ok);
 
     gpioSetAlertFunc(23, f_left_right);
@@ -100,22 +112,26 @@ int main(int argc, char *argv[]) {
 
     // main loop
     while (running) {
-        // if (gpioRead(27) == 1) {
-        //     f_dipol_upper(27, 1, 0);
-        // } else {
-        //     f_dipol_upper(27, 0, 0);
-        // }
-        // if (gpioRead(17) == 1) {
-        //     f_dipol_upper(17, 1, 0);
-        // } else {
-        //     f_dipol_upper(17, 0, 0);
-        // }
-        // sleep(1);
+        int tempstate;
+
+        // handled that way beacuse of hardware switches limitations...
+        tempstate = gpioRead(27);
+        if (tempstate != gpio27state){
+            gpio27state = tempstate;
+            f_dipol_upper(27, gpio27state, 0);
+        }
+        tempstate = gpioRead(17);
+        if (tempstate != gpio17state){
+            gpio17state = tempstate;
+            f_dipol_upper(17, gpio17state, 0);
+        }
+
+        sleep(2);
     }
 
-    d_print("terminating...\n");
-    gpioTerminate();
-    exit(EXIT_SUCCESS);
+    /*   d_print("terminating...\n");
+       gpioTerminate();
+       exit(EXIT_SUCCESS); */
 }
 
 void f_left_right(int gpio, int level, uint32_t tick) {
@@ -281,7 +297,10 @@ void f_dipol_upper(int gpio, int level, uint32_t tick) {
     d_print("executing rfkill %s %s\n", action, component);
 
     if ((pid = fork()) == 0) {
-        execl("rfkill", "rfkill", action, component, NULL);
+        execl("/usr/sbin/rfkill", "rfkill", action, component, NULL);
+        d_print("execl error %s\n", strerror(errno));
+        exit(1);
+        // for(;;);
     }
 }
 
@@ -298,6 +317,8 @@ void press_key(char *input) {
         d_print("pressing: %s\n", input);
         execl("/usr/local/bin/input-emulator", "input-emulator", "kbd", "key",
               input, NULL);
+        d_print("execl error %s\n", strerror(errno));
+        exit(1);
     }
 }
 
@@ -307,6 +328,8 @@ void type_keys(char *input) {
         d_print("pressing: %s\n", input);
         execl("/usr/local/bin/input-emulator", "input-emulator", "kbd", "type",
               input, NULL);
+        d_print("execl error %s\n", strerror(errno));
+        exit(1);
     }
 }
 
