@@ -1,4 +1,25 @@
-## img dwnld
+# Piplayer
+This is my project that focuses on creating a music player out of Raspberry Pi zero 2w and basically other trash I found in my drower. This repo is a list of steps you have to do to get it working, basic schematics of control panel, some helper scripts and commands, and a simple program in C for gpio buttons support. If you like it you can try making your own :)
+
+Currently work in progress, as i need to clean up this README and this repo in general.
+
+### used parts list 
+- (Raspberry Pi zero 2w)[https://example.com]
+- (Adafriut Mini PITFT 1.3)[https://www.adafruit.com/product/4484]
+- (Waveshare Li-ion Battery HAT)[https://www.waveshare.com/li-ion-battery-hat.htm]
+- (PCM5102 DAC (or simmilar))[https://example.com]
+- Universal doublesided Prototyping Board (3x7 cm)
+- Tact Switches
+- Slide switches (3 pos and 2 pos)
+- DIP switch 2-pole
+- Generic cables
+
+# Operating system tweaking 
+generic tips and steps to prepare operating system as much as possible before.  
+for this project raspberry pi os was choosen, however after a while i realised it was not the best choice.  
+maybe one day custom operating system will be prepared with tool like yocto.
+
+## img download
 https://www.raspberrypi.com/software/operating-systems/
 
 ## img customisation 
@@ -79,15 +100,16 @@ usermod -aG sudo pi
 ~/etc/hostname~
 already present: `raspberrypi`
 
-## enable ssh:
-maybe just systemctl start sshd???
+## ~enable ssh:~ 
+~maybe just systemctl start sshd???~
+depracated in newest version of raspbian...
 ```
 doas touch /mnt/boot/ssh
 ```
 
 ## ~wpa_supplicant connection~
 ~maybe have to be turned on?~
-legacy (not working):
+depracated
 ```
 # wpa_passphrase MYSSID passphrase > /mnt/etc/wpa_supplicant/wpa_supplicant.conf
 ```
@@ -105,12 +127,13 @@ mkdir /home/pi/music
 doas mkfs.ext4 /dev/mmcblk0p3
 ```
 ## giga umount
+umounting all partitions
 ```
 doas umount /dev/mmcblk0p3 /dev/mmcblk0p1 /mnt/proc /dev/mmcblk0p2
 ```
 ___
 
-### ssh into pi
+# after ssh into pi
 
 ## upgrade and update
 ```
@@ -306,4 +329,4 @@ turning off leds
 ```
 echo none | sudo tee /sys/class/leds/led0/trigger
 ```
-### diasbling
+
