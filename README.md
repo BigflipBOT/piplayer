@@ -14,10 +14,11 @@ Currently work in progress, as i need to clean up this README and this repo in g
 - DIP switch 2-pole
 - Generic cables
 
-# Operating system tweaking 
+# System Image tweaking 
 generic tips and steps to prepare operating system as much as possible before.  
 for this project raspberry pi os was choosen, however after a while i realised it was not the best choice.  
 maybe one day custom operating system will be prepared with tool like yocto.
+below actions are performed on your mashine. `#` indicates, that actions require root privelages.
 
 ## img download
 https://www.raspberrypi.com/software/operating-systems/
@@ -29,42 +30,47 @@ https://brettweir.com/blog/custom-raspberry-pi-image-no-hardware/
 `/mnt/boot/firstrun.sh`
 
 ### chrooting into arm system from x86
+usefull link:
 https://wiki.archlinux.org/title/QEMU#Chrooting_into_arm/arm64_environment_from_x86_64
 
 ## flashing:
+flashing image to the sd card
 ```
-xzcat 2025-05-13-raspios-bookworm-arm64-lite.img.xz | doas dd of=/dev/mmcblk0 bs=32M
-```
-```
-xzcat 2025-05-13-raspios-bookworm-arm64-lite.img.xz | doas dd of=/dev/mmcblk0 bs=1M count=10240 status=progress
+# xzcat 2025-05-13-raspios-bookworm-arm64-lite.img.xz | dd of=/dev/mmcblk0 bs=1M count=10240 status=progress
 ```
 
-## shrink fs as much as possible:
+## creating new partition for music files
+this step is technically optional, however it helps me with managing my music library.
+### shrink fs as much as possible:
 ```
-doas e2fsck -f /dev/mmcblk0p2 && doas resize2fs -M /dev/mmcblk0p2
-```
-
-## sanity check for space:
-```
-doas dust /mnt
+# e2fsck -f /dev/mmcblk0p2 && resize2fs -M /dev/mmcblk0p2
 ```
 
-## changing partition table:
-### shrink 
+### (optional) check storage pace:
 ```
-doas fdisk /dev/mmcblk0
+# dust /mnt
+```
+
+### changing partition table:
+if you know what you are doing you can use any other tool. I will be using fdisk.
+```
+# fdisk /dev/mmcblk0
+```
+
+#### shrink p2
+```
 e 
 2 
 10G
 ```
-### list to get last sector:
+#### list to get last sector:
 ```
 p
 Device         Boot  Start      End  Sectors  Size Id Type
 /dev/mmcblk0p1        8192   532479   524288  256M  c W95 FAT32 (LBA)
 /dev/mmcblk0p2      532480 21503999 20971520   10G 83 Linux
 ```
-### create new partition
+#### create new partition
 
 ```
 n 
@@ -73,7 +79,7 @@ p
 2150400
 <return>
 ```
-### list to verify:
+#### (optional) list to verify everyting worked as intended:
 ```
 p
 Device         Boot    Start      End  Sectors  Size Id Type
@@ -82,79 +88,51 @@ Device         Boot    Start      End  Sectors  Size Id Type
 /dev/mmcblk0p3      21504000 62521343 41017344 19.6G 83 Linux
 ```
 
-
-## resize filesystem to full partiton size:
+### resize filesystem on os partition to full partiton size:
 ```
-doas e2fsck -f /dev/mmcblk0p2 && doas resize2fs /dev/mmcblk0p2
+# e2fsck -f /dev/mmcblk0p2 && resize2fs /dev/mmcblk0p2
 ```
-# customisation of raspi os
-
+# customisation of raspberry pi os
+In this part you modify raspberry pi os. You need access to files, some actions you can perform while mounted, some actions require you having a shell access. Probably the easiest way is to set up the ssh connection to your pi however some .
 ## nonroot user customisation 
 ```
 passwd pi 
 usermod -aG sudo pi
-
-```
-
-## hostname
-~/etc/hostname~
-already present: `raspberrypi`
-
-## ~enable ssh:~ 
-~maybe just systemctl start sshd???~
-depracated in newest version of raspbian...
-```
-doas touch /mnt/boot/ssh
-```
-
-## ~wpa_supplicant connection~
-~maybe have to be turned on?~
-depracated
-```
-# wpa_passphrase MYSSID passphrase > /mnt/etc/wpa_supplicant/wpa_supplicant.conf
-```
-## nmcli connection
-`/etc/NetworkManager/system-connections/my-wifi.nmconnection`
-```
-doas chmod 600 wifi.nmconnection
-doas chown root:root wifi.nmconnection
 ```
 
 ## create music partition
 ```
 mkdir /home/pi/music
 # echo "PARTUUID=d9c86127-03  /home/pi/music  ext4    defaults 1 2" >> /mnt/etc/fstab 
-doas mkfs.ext4 /dev/mmcblk0p3
+# mkfs.ext4 /dev/mmcblk0p3
 ```
-## giga umount
-umounting all partitions
-```
-doas umount /dev/mmcblk0p3 /dev/mmcblk0p1 /mnt/proc /dev/mmcblk0p2
-```
-___
-
-# after ssh into pi
-
 ## upgrade and update
 ```
 sudo apt-get -y update && sudo apt-get -y upgrade
 ```
 
 https://www.instructables.com/Raspberry-Pi-HQ-Audio-PCM5102-and-MPD/
-##
-sudo nano /etc/modprobe.d/alsa-blacklist.conf
+## blacklisting module
+```
+sudo vim /etc/modprobe.d/alsa-blacklist.conf
+```
+add: `blacklist snd_bcm2835`
 
-blacklist snd_bcm2835
-
-## 
+## add driver support
+```
 sudo vim /boot/firmware/config.txt
+```
 
 comment out dtparam=audio=on (# in col 0)
 add `dtoverlay=hifiberry-dac` at the end
 
 ## sound configuration
 
+modify `/etc/asound.conf` file:
+```
 sudo vim /etc/asound.conf
+```
+add below lines:
 ```
 pcm.!default {
 type hw
@@ -166,13 +144,16 @@ type hw
 card 0
 }
 ```
-add self to audio group
+add self to audio group:
 ```
 sudo usermod -aG audio pi
 ```
-reboot
+reboot:
+```
+sudo reboot now
+```
 
-stuff should work by now:
+stuff should work by now, test with following commands:
 ```
 aplay -l
 speaker-test -D default -c 2 -twav
@@ -180,7 +161,7 @@ speaker-test -D default -c 2 -twav
 
 
 https://www.raspberrypi-spy.co.uk/2019/06/using-a-usb-audio-device-with-the-raspberry-pi/
-sudo nano /usr/share/alsa/alsa.conf
+sudo vim /usr/share/alsa/alsa.conf
 ```
 defaults.ctl.card 1
 defaults.pcm.card 1
@@ -209,7 +190,8 @@ sudo apt install bluetooth pulseaudio* ~pulseaudio-module-bluetooth~
 ```
 
 ## adafriut Mini PITFT 1.3
-
+getting display working.  
+usefull links:
 (pinout of display)[https://learn.adafruit.com/adafruit-mini-pitft-135x240-color-tft-add-on-for-raspberry-pi?view=all]
 (install instructions)[https://learn.adafruit.com/adafruit-mini-pitft-135x240-color-tft-add-on-for-raspberry-pi/1-3-240x240-kernel-module-install]
 (driver repo)[https://github.com/adafruit/Raspberry-Pi-Installer-Scripts]
@@ -223,7 +205,6 @@ Setup Virtual Environment
 ```
 sudo apt install python3-venv
 python -m venv env --system-site-packages
-
 ```
 
 To activate the virtual environment:
@@ -244,9 +225,7 @@ sudo apt-get install -y git
 git clone https://github.com/adafruit/Raspberry-Pi-Installer-Scripts.git
 cd Raspberry-Pi-Installer-Scripts
 sudo -E env PATH=$PATH python3 adafruit-pitft.py --display=st7789_240x240 --rotation=3 --install-type=console
-
 ```
-
 
 ___
 
@@ -256,33 +235,17 @@ sudo apt-get install mpd ncmpcpp
 systemctl --user ebable mpd
 ```
 
-https://www.customelectronics.co.uk/rpihq.htm
-
-# binding buttons and stuff 
+# controls
+All gpio buttons emulate some keyboard buttons, depending on current layer selection
 ## input emulation
-huge saver:
-https://github.com/tio/input-emulator
-https://github.com/torvalds/linux/blob/v4.12/include/uapi/linux/input-event-codes.h#L64
-
-https://github.com/chaitu236/TermKeyboard
-
-https://forums.raspberrypi.com/viewtopic.php?t=87932
-https://www.fsays.eu/Blogging/Blog/Details/23
-
-https://forums.raspberrypi.com/viewtopic.php?t=284359
-
-https://forums.raspberrypi.com/viewtopic.php?t=184050
+huge saver: (input-emulator)[https://github.com/tio/input-emulator], needs modification to support any different keyboard layout than dk, or changing keybord layout and keybinds.
+linux input emulation (example)[https://github.com/torvalds/linux/blob/v4.12/include/uapi/linux/input-event-codes.h#L64] on github
 
 ## pigpio
-https://abyz.me.uk/rpi/pigpio/cif.html
+you need to install (pigpio)[https://abyz.me.uk/rpi/pigpio/cif.html] library to use controls wrapper program for gpio buttons.
 ```
 sudo apt install pigpio
 ```
-
-
-https://www.musicpd.org/doc/mpc/html/ 
-
-https://github.com/eonpatapon/mpDris2
 
 ## building programs
 main build gcc command:
@@ -298,9 +261,9 @@ filename=${filename%.*}
 echo $filename
 gcc -Wall -pthread -o $filename $1 -lpigpio -lrt
 ```
-main program is being executed from .bashrc at pi users home dir.
+main program is being executed from .bashrc at home dir.
 
-# optimalisation
+# optimalisations for battery life
 ## turning off unused stuff
 https://ohyaan.github.io/tips/raspberry_pi_boot_time_optimization__complete_performance_guide/#2-kernel-command-line-optimization
 https://www.cnx-software.com/2021/12/09/raspberry-pi-zero-2-w-power-consumption/
