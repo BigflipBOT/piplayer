@@ -1,18 +1,20 @@
 # Piplayer
 This is my project that focuses on creating a music player out of Raspberry Pi zero 2w and basically other trash I found in my drower. This repo is a list of steps you have to do to get it working, basic schematics of control panel, some helper scripts and commands, and a simple program in C for gpio buttons support. If you like it you can try making your own :)
+![picture](pictures/IMG_20250915_052526_922.jpg)
+![picture](pictures/IMG_20250915_052833_440.jpg)
 
 Currently work in progress, as i need to clean up this README and this repo in general.
 
 ### used parts list 
-- (Raspberry Pi zero 2w)[https://example.com]
-- (Adafriut Mini PITFT 1.3)[https://www.adafruit.com/product/4484]
-- (Waveshare Li-ion Battery HAT)[https://www.waveshare.com/li-ion-battery-hat.htm]
-- (PCM5102 DAC (or simmilar))[https://example.com]
+- [Raspberry Pi zero 2w](https://www.raspberrypi.com/products/raspberry-pi-zero-2-w/)
+- [Adafriut Mini PITFT 1.3](https://www.adafruit.com/product/4484)
+- [Waveshare Li-ion Battery HAT](https://www.waveshare.com/li-ion-battery-hat.htm)
+- [PCM5102A DAC (or simmilar)](https://docs.cirkitdesigner.com/component/1014fa5d-90dc-43eb-b09c-e0fff9e97c99/pcm5102a-i2s-dac)
+- [DIP switches 2-pole](https://en.wikipedia.org/wiki/DIP_switch)
 - Universal doublesided Prototyping Board (3x7 cm)
 - Tact Switches
 - Slide switches (3 pos and 2 pos)
-- DIP switch 2-pole
-- Generic cables
+- Some Generic cables
 
 # System Image tweaking 
 generic tips and steps to prepare operating system as much as possible before.  
@@ -30,8 +32,8 @@ https://brettweir.com/blog/custom-raspberry-pi-image-no-hardware/
 `/mnt/boot/firstrun.sh`
 
 ### chrooting into arm system from x86
-usefull link:
-https://wiki.archlinux.org/title/QEMU#Chrooting_into_arm/arm64_environment_from_x86_64
+usefull link (any distro really):
+`https://wiki.archlinux.org/title/QEMU#Chrooting_into_arm/arm64_environment_from_x86_64`
 
 ## flashing:
 flashing image to the sd card
@@ -175,6 +177,7 @@ https://blog.himbeer.me/2018/12/27/how-to-connect-a-pcm5102-i2s-dac-to-your-rasp
 
 
 # bluetooth
+bluetooth is optional.
 https://forums.raspberrypi.com/viewtopic.php?t=306920
 https://wiretuts.com/connecting-bluetooth-audio-device-to-raspberry-pi/
 sudo usermod -aG bluetooth pi
@@ -282,7 +285,7 @@ dtparam=audio=off
 #dtoverlay=vc4-kms-v3d
 ```
 
-### usefull commands (didn't feel like doing those)
+### usefull commands i found (didn't feel like doing those)
 turning off hdmi 
 https://forums.raspberrypi.com/viewtopic.php?t=113602
 ```
