@@ -248,9 +248,9 @@ visualizer_spectrum_smooth_look = yes
 ## Note: colors can be nested.
 ##
 #
-#song_list_format = {%a - }{%t}|{$8%f$9}$R{$3%l$9}
+song_list_format = {%t - }{%a}|{$8%f$9}$R{$3%l$9}
 #
-#song_status_format = {{%a{ "%b"{ (%y)}} - }{%t}}|{%f}
+#song_status_format = {{%a{ "%b"{ (%t)}} - }{%t}}|{%f}
 #
 #song_library_format = {%n - }{%t}|{%f}
 #
@@ -514,7 +514,7 @@ visualizer_spectrum_smooth_look = yes
 ## Note: if below is enabled, ncmpcpp will ignore leading "The" word while
 ## sorting items in browser, tags in media library, etc.
 ##
-#ignore_leading_the = no
+ignore_leading_the = yes
 #
 ##
 ## Note: if below is enabled, ncmpcpp will ignore diacritics while searching and
@@ -525,7 +525,7 @@ visualizer_spectrum_smooth_look = yes
 #
 #block_search_constraints_change_if_items_found = yes
 #
-#mouse_support = yes
+mouse_support = no
 #
 #mouse_list_scroll_whole_page = no
 #

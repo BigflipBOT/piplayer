@@ -155,7 +155,7 @@ void f_left_right(int gpio, int level, uint32_t tick) {
             break;
         case G_NAVIGATION:
             if (gpio == 24) {
-                if (ncmpcpp_screen < 8) {
+                if (ncmpcpp_screen < 7) {
                     ncmpcpp_screen++;
                 }
             } else if (gpio == 23) {
@@ -300,7 +300,6 @@ void f_dipol_upper(int gpio, int level, uint32_t tick) {
         execl("/usr/sbin/rfkill", "rfkill", action, component, NULL);
         d_print("execl error %s\n", strerror(errno));
         exit(1);
-        // for(;;);
     }
 }
 
