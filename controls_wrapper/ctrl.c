@@ -35,6 +35,8 @@ void f_slider_lower(int gpio, int level, uint32_t tick);
 void f_dipol_upper(int gpio, int level, uint32_t tick);
 int gpio27state = 0;
 int gpio17state = 0;
+int gpio26state = 0;
+int gpio13state = 0;
 void f_dipol_lower_l(int gpio, int level, uint32_t tick);
 void f_dipol_lower_r(int gpio, int level, uint32_t tick);
 
@@ -78,16 +80,6 @@ int main(int argc, char *argv[]) {
     } else {
         controls = ARROWS;
     }
-
-    if (gpioRead(27)) {
-        gpio27state = 1;
-        f_dipol_upper(27, gpio27state, 0);
-    }
-    if (gpioRead(17)) {
-        gpio27state = 1;
-        f_dipol_upper(17, gpio17state, 0);
-    }
-
     gpioSetAlertFunc(12, f_play_pause_ok);
 
     gpioSetAlertFunc(23, f_left_right);
@@ -103,6 +95,19 @@ int main(int argc, char *argv[]) {
 
     // gpioSetAlertFunc(27, f_dipol_upper);
     // gpioSetAlertFunc(17, f_dipol_upper);
+
+    if (gpioRead(27)) {
+        gpio27state = 1;
+        f_dipol_upper(27, 1, 0);
+    }
+    if (gpioRead(17)) {
+        gpio27state = 1;
+        f_dipol_upper(17, 1, 0);
+    }
+    if (gpioRead(26)) {
+        gpio26state = 1;
+    }
+    f_dipol_lower_r(26, gpio26state, 0);
 
     d_print("init done\n");
     d_print("mode %d\n", controls);
@@ -124,6 +129,11 @@ int main(int argc, char *argv[]) {
         if (tempstate != gpio17state){
             gpio17state = tempstate;
             f_dipol_upper(17, gpio17state, 0);
+        }
+        tempstate = gpioRead(26);
+        if (tempstate != gpio26state){
+            gpio26state = tempstate;
+            f_dipol_lower_r(26, gpio26state, 0);
         }
 
         sleep(2);
@@ -307,7 +317,10 @@ void f_dipol_upper(int gpio, int level, uint32_t tick) {
 
 void f_dipol_lower_l(int gpio, int level, uint32_t tick);
 
-void f_dipol_lower_r(int gpio, int level, uint32_t tick);
+void f_dipol_lower_r(int gpio, int level, uint32_t tick) {
+    d_print("display backlight pin changed to: %d\n", level);
+    gpioWrite(22, level);
+}
 
 void press_key(char *input) {
     int pid;
@@ -375,5 +388,4 @@ void gpio_setup() {
     gpioSetPullUpDown(26, PI_PUD_DOWN);
     gpioSetPullUpDown(24, PI_PUD_UP);
     gpioSetPullUpDown(23, PI_PUD_UP);
-    gpioSetPullUpDown(22, PI_PUD_DOWN);
 }
